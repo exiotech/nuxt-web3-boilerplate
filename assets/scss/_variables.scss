@@ -1,0 +1,27 @@
+$font-family-sans-serif: "Kanit", system-ui, -apple-system, "Segoe UI", roboto,
+  "Helvetica Neue", arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+$height-header: 64px;
+$height-footer: 64px;
+
+$navbar-padding-y: 0;
+$navbar-brand-padding-y: 0;
+$nav-link-padding-y: 0;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+);
