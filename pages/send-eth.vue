@@ -2,7 +2,7 @@
   <web3-connection-placeholder :classes="['page-content']" tag="main">
     <div class="container">
       <div class="card card-body mx-auto mt-5 form-container">
-        <web3-form :callback="send">
+        <web3-form :callback="handleSend">
           <fieldset class="mb-3">
             <label for="">Send To:</label>
             <input
@@ -47,19 +47,19 @@ export default {
   mixins: [user],
   data() {
     return {
-      receiver: "0xa42b810Cf515Fc8E472CCE60f3F136e81E1e816C",
-      amount: 0.1,
+      receiver: null,
+      amount: "0",
     };
   },
   methods: {
     ...mapActions({
-      sendETH: "user/sendETH",
+      send: "user/assets/sendNative",
     }),
-    send() {
-      return this.$web3().eth.sendTransaction({
+    handleSend() {
+      return this.$web3.eth.sendTransaction({
         from: this.address,
         to: this.receiver,
-        value: this.$web3().utils.toWei(this.amount.toString()),
+        value: this.$web3.utils.toWei(this.amount.toString()),
       });
     },
   },

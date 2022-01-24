@@ -1,6 +1,0 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-[build.environment]
-  CONTRACT_ADDRESS="0x6a0D2F1fF2A2a4ccB76B43097F1B1ed1a14c97f4"
-  OWNER_ADDRESS="0x85E9FD89198AB11f1855cf3A474E2ff3E422dFd9"

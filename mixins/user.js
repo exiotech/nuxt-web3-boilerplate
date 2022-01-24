@@ -12,24 +12,24 @@ export default {
 
   data() {
     return {
-      userTimer: null,
+      userMixin_userTimer: null,
     };
   },
 
   methods: {
     ...mapActions({
       login: "auth/login",
-      _loadUserData: "user/loadData",
+      userMixin_loadUserDataAction: "user/loadData",
     }),
 
-    async __loadUserData() {
+    async userMixin_loadUserData() {
       if (this.address) {
         await this.login();
-        await this._loadUserData();
+        await this.userMixin_loadUserDataAction();
 
-        clearTimeout(this.userTimer);
+        clearTimeout(this.userMixin_userTimer);
 
-        this.userTimer = setTimeout(this.__loadUserData, USER_UPDATE_INTERVAL);
+        this.userMixin_userTimer = setTimeout(this.userMixin_loadUserData, USER_UPDATE_INTERVAL);
       }
     },
   },
@@ -37,39 +37,13 @@ export default {
   watch: {
     address(to) {
       if (to) {
-        clearTimeout(this.userTimer);
-        this.__loadUserData();
+        clearTimeout(this.userMixin_userTimer);
+        this.userMixin_loadUserData();
       }
     },
   },
 
-  async mounted() {
-    try {
-      const provider = await this.$localForage.getItem("provider");
-      const int = setInterval(() => {
-        if (this.$ethereum()) {
-          if (["injected", "binance"].includes(provider)) {
-            this.$setWeb3Provider(provider);
-            this.login()
-              .then((d) => {
-                console.log(d);
-              })
-              .catch((err) => {
-                console.error(err);
-                return this.$localForage.removeItem("provider");
-              });
-          }
-          clearInterval(int);
-        }
-      }, 3000);
-    } catch (err) {
-      console.error(err);
-    }
-
-    await this.__loadUserData();
-  },
-
   destroyed() {
-    clearTimeout(this.userTimer);
+    clearTimeout(this.userMixin_userTimer);
   },
 };

@@ -52,8 +52,7 @@ export default {
     },
   },
   watch: {
-    chainId(to, from) {
-      console.log(to, from);
+    chainId() {
       if (!this.isSupportedChain) {
         this.open();
       } else {

@@ -2,7 +2,7 @@
   <web3-connection-placeholder :classes="['page-content']" tag="main">
     <div class="container">
       <div class="card card-body mx-auto mt-5 form-container">
-        <web3-form :callback="onSend">
+        <web3-form :callback="handleSend">
           <fieldset class="mb-3">
             <label for="">Token:</label>
             <select
@@ -64,7 +64,7 @@ export default {
   mixins: [user],
   data() {
     return {
-      receiver: "0xa42b810Cf515Fc8E472CCE60f3F136e81E1e816C",
+      receiver: null,
       amount: "0",
       selectedToken: null,
     };
@@ -87,7 +87,7 @@ export default {
     ...mapActions({
       send: "user/assets/send",
     }),
-    onSend() {
+    handleSend() {
       return this.send({
         token: this.selectedToken,
         receiver: this.receiver,

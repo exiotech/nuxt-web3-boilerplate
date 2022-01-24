@@ -68,11 +68,11 @@ export const getters = {
     (token, amount) =>
       new BigNumber(amount)
         .div(new BigNumber(10).pow(new BigNumber(decimals[token] || 18)))
-        .toNumber(),
+        .toString(),
   parseUint:
     ({ decimals }) =>
     (token, amount) =>
       new BigNumber(amount)
         .times(new BigNumber(10).pow(new BigNumber(decimals[token] || 18)))
-        .toNumber(),
+        .toString(),
 };

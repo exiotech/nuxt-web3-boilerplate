@@ -8,6 +8,7 @@
 
 <script>
 import user from "@/mixins/user";
+
 export default {
   mixins: [user],
 };

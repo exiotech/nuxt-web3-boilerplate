@@ -27,6 +27,26 @@
   </popups-wrapper>
 </template>
 
+<script setup>
+const { $setWeb3Provider, $store, $localForage } = useNuxtApp();
+
+let selectedProviderIndex = null;
+
+async function handleConnect(index, callback) {
+  selectedProviderIndex = index;
+  const { providerName } = this.providers[index];
+  try {
+    await $localForage.setItem('provider', providerName);
+    await $setWeb3Provider(providerName);
+    await $store.dispatch('auth/login');
+    selectedProviderIndex = null;
+    callback();
+  } catch (err) {
+    console.error(err);
+  }
+}
+</script>
+
 <script>
 import { mapActions } from "vuex";
 import { PROVIDERS } from "~/constants";
@@ -56,21 +76,6 @@ export default {
     ...mapActions({
       login: 'auth/login',
     }),
-
-    async handleConnect(index, callback) {
-      this.selectedProviderIndex = index;
-      console.log(this.providers);
-      const { providerName } = this.providers[index];
-      try {
-        await this.$localForage.setItem('provider', providerName);
-        await this.$setWeb3Provider(providerName);
-        await this.login();
-        this.selectedProviderIndex = null;
-        callback();
-      } catch (err) {
-        console.error(err);
-      }
-    },
   },
 };
 </script>

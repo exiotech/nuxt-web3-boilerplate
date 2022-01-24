@@ -42,15 +42,11 @@
     </nav>
   </header>
 </template>
-<script>
-export default {
-  computed: {
-    appName() {
-      return process.env.app.name;
-    },
-  },
-};
+
+<script setup>
+const appName = process.env.app.name;
 </script>
+
 <style lang="scss">
 .header {
   height: $height-footer;

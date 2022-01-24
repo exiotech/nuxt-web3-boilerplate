@@ -9,8 +9,10 @@ import { getChainById } from '@/constants/networks';
 
 import ERC20_ABI from '@/contracts/abis/ERC20';
 
-export default (ctx, inject) => {
-  let provider;
+import { defineNuxtPlugin } from '#app';
+
+export default defineNuxtPlugin((nuxtApp) => {
+  let provider = null;
   let chainID = 3;
   const web3obj = new Web3(getChainById(chainID).url);
   const readWeb3Provider = new Web3.providers.WebsocketProvider(
@@ -24,7 +26,7 @@ export default (ctx, inject) => {
       },
     },
   );
-  const readWeb3obj = new Web3(readWeb3Provider);
+  const web3Read = new Web3(readWeb3Provider);
 
   const $contracts = {
     tokens: {},
@@ -61,7 +63,7 @@ export default (ctx, inject) => {
 
   const setChainId = (id) => {
     if (chainID !== id) {
-      ctx.app.store.commit('web3/SET_LOADING', true);
+      nuxtApp.nuxt2Context.app.store.commit('web3/SET_LOADING', true);
     }
     chainID = id;
     const provider = new Web3.providers.WebsocketProvider(
@@ -75,7 +77,7 @@ export default (ctx, inject) => {
         },
       },
     );
-    readWeb3obj.setProvider(provider);
+    web3Read.setProvider(provider);
 
     try {
       Object.keys(CONTRACTS).forEach((contractName) => {
@@ -93,8 +95,8 @@ export default (ctx, inject) => {
     } catch (e) {
       console.error(e);
     } finally {
-      ctx.app.store.commit('web3/SET_CHAIN_ID', chainID);
-      ctx.app.store.commit('web3/SET_LOADING', false);
+      nuxtApp.nuxt2Context.app.store.commit('web3/SET_CHAIN_ID', chainID);
+      nuxtApp.nuxt2Context.app.store.commit('web3/SET_LOADING', false);
     }
   };
 
@@ -115,7 +117,7 @@ export default (ctx, inject) => {
       ABI = require(`@/contracts/abis/${contractNameUppercase}.json`);
       if (['Multicall'].includes(contractNameUppercase)) {
         $contracts[contractName[0].toLocaleLowerCase() + contractName.slice(1)] =
-          new readWeb3obj.eth.Contract(ABI, CONTRACTS[contractName][chainID]);
+          new web3Read.eth.Contract(ABI, CONTRACTS[contractName][chainID]);
       } else {
         $contracts[contractName[0].toLocaleLowerCase() + contractName.slice(1)] =
           new web3obj.eth.Contract(ABI, CONTRACTS[contractName][chainID]);
@@ -136,17 +138,6 @@ export default (ctx, inject) => {
       // console.error(e);
     }
   }, 1500);
-
-  const web3 = () => {
-    return web3obj;
-  };
-  const readWeb3 = () => {
-    return readWeb3obj;
-  };
-
-  const ethereum = () => {
-    return provider;
-  };
 
   const setWeb3Provider = async (p) => {
     let providerObject;
@@ -190,21 +181,12 @@ export default (ctx, inject) => {
     return new BigNumber(n);
   };
 
-  ctx.$web3 = web3;
-  ctx.$readWeb3 = readWeb3;
-  ctx.$ethereum = ethereum;
-  ctx.$setWeb3Provider = setWeb3Provider;
-  ctx.$chainId = chainId;
-  ctx.$contracts = $contracts;
-  ctx.$multicall = $multicall;
-  ctx.$bigNumber = $bigNumber;
-
-  inject('contracts', $contracts);
-  inject('multicall', $multicall);
-  inject('bigNumber', $bigNumber);
-  inject('web3', web3);
-  inject('readWeb3', readWeb3);
-  inject('ethereum', ethereum);
-  inject('setWeb3Provider', setWeb3Provider);
-  inject('chainId', chainId);
-};
+  nuxtApp.provide('ethereum', () => provider);
+  nuxtApp.provide('setWeb3Provider', setWeb3Provider);
+  nuxtApp.provide('web3', web3obj);
+  nuxtApp.provide('web3Read', web3Read);
+  nuxtApp.provide('contracts', $contracts);
+  nuxtApp.provide('multicall', $multicall);
+  nuxtApp.provide('bigNumber', $bigNumber);
+  nuxtApp.provide('chainId', chainId);
+});

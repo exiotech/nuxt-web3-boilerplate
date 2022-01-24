@@ -16,8 +16,8 @@ export const actions = {
         addresses = await this.$ethereum().request({
           method: "eth_requestAccounts",
         });
-      } else if (this.$web3().requestAccounts) {
-        addresses = await this.$web3().requestAccounts();
+      } else if (this.$web3.requestAccounts) {
+        addresses = await this.$web3.requestAccounts();
       }
       if (this.$ethereum().on) {
         this.$ethereum().on("accountsChanged", (accounts) => {
@@ -25,9 +25,9 @@ export const actions = {
           commit("LOGIN", { address });
         });
       }
-      if (this.$web3()) {
+      if (this.$web3) {
         if (!addresses.length) {
-          addresses = await this.$web3().eth.getAccounts();
+          addresses = await this.$web3.eth.getAccounts();
         }
         const address = this.$ethereum()?.selectedAddress || addresses[0];
         if (!address) {
@@ -43,7 +43,7 @@ export const actions = {
 
 export const mutations = {
   LOGIN(state, { address }) {
-    address = this.$web3().utils.toChecksumAddress(address);
+    address = this.$web3.utils.toChecksumAddress(address);
     if (address === state.address) {
       return;
     }

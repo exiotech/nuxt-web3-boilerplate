@@ -36,13 +36,12 @@ export const actions = {
       const tokenNames = Object.keys(this.$contracts.tokens).filter((token) => {
         return !!this.$contracts.tokens[token].options.address;
       });
-      console.log(tokenNames);
       await dispatch("web3/assets/loadTokensDecimals", {}, { root: true });
       (await loadTokenBalances.bind(this)(address, tokenNames)).forEach((r, i) => {
         balances[tokenNames[i]] = r;
       });
 
-      balances.NATIVE = await this.$web3()
+      balances.NATIVE = await this.$web3
         .eth.getBalance(address)
         .catch((e) => {
           console.error(e);
@@ -60,9 +59,9 @@ export const actions = {
       const { address } = rootState.auth;
       const balances = {};
       if (tokenName !== "NATIVE") {
-        balances.NATIVE = await this.$web3()
+        balances.NATIVE = await this.$web3
           .eth.getBalance(address)
-          .then((r) => Math.max(Number(this.$web3().utils.fromWei(r)) - 0.01, 0))
+          .then((r) => Math.max(Number(this.$web3.utils.fromWei(r)) - 0.01, 0))
           .catch((e) => {
             console.error(e);
             return 0;
@@ -102,6 +101,22 @@ export const actions = {
       { root: true },
     ).then(() => {
       return dispatch("loadBalance", token);
+    });
+  },
+
+  sendNative({ dispatch, rootGetters }, { receiver, amount }) {
+    amount = rootGetters["web3/assets/parseUint"]('ETH', amount);
+    return dispatch(
+      "transactions/send",
+      {
+        callback: this.$web3.eth.sendTransaction({
+          to: receiver,
+          value: this.$web3.utils.toWei(amount.toString()),
+        }),
+      },
+      { root: true },
+    ).then(() => {
+      return dispatch("loadBalance", 'ETH');
     });
   },
 

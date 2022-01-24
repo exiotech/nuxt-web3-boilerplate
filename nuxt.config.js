@@ -1,7 +1,9 @@
+import { defineNuxtConfig } from '@nuxt/bridge'
+
 import i18n from "./i18n";
 import pkg from "./package";
 
-export default {
+export default defineNuxtConfig({
   // Target: https://go.nuxtjs.dev/config-target
   target: "static",
 
@@ -107,6 +109,10 @@ export default {
     ],
   },
 
+  bridge: {
+    meta: true,
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["@/assets/scss/app"],
 
@@ -128,7 +134,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    "@nuxtjs/eslint-module",
+    // "@nuxtjs/eslint-module",
     "@nuxtjs/stylelint-module",
     "@nuxtjs/style-resources",
     "@nuxtjs/localforage",
@@ -171,6 +177,11 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
+    extend: (config, { isDev, isClient }) => {
+      config.node = {
+          fs: "empty",
+      };
+    },
   },
 
   env: {
@@ -186,4 +197,4 @@ export default {
     linkActiveClass: 'sub-active',
     linkExactActiveClass: 'active',
   },
-};
+});
