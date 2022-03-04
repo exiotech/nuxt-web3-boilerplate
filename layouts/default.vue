@@ -38,7 +38,17 @@ onMounted(async () => {
 </script>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-  name: "default",
+  name: "Default",
+  mounted() {
+    this.startQueryTimeout();
+  },
+  methods: {
+    ...mapActions({
+      startQueryTimeout: 'web3/transactions/startQueryTimeout',
+    }),
+  },
 };
 </script>

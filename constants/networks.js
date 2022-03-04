@@ -1,8 +1,8 @@
 export const NETWORKS = {
   mainnet: {
     name: 'Ethereum Mainnet',
-    url: `https://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/eth/mainnet`,
-    wss: 'wss://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/eth/mainnet/ws',
+    url: `https://mainnet.infura.io/v3/26865e576832400484856124fe33ad87`,
+    wss: 'wss://mainnet.infura.io/ws/v3/26865e576832400484856124fe33ad87',
     chainId: 1,
     nativeCurrency: {
       name: 'Ether',
@@ -13,8 +13,8 @@ export const NETWORKS = {
   },
   ropsten: {
     name: 'Ropsten Testnet',
-    url: `https://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/eth/ropsten`,
-    wss: 'wss://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/eth/ropsten/ws',
+    url: `https://ropsten.infura.io/v3/26865e576832400484856124fe33ad87`,
+    wss: 'wss://ropsten.infura.io/ws/v3/26865e576832400484856124fe33ad87',
     chainId: 3,
     nativeCurrency: {
       name: 'Ropsten Ether',
@@ -25,8 +25,8 @@ export const NETWORKS = {
   },
   rinkeby: {
     name: 'Rinkeby Testnet',
-    url: `https://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/eth/rinkeby`,
-    wss: 'wss://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/eth/rinkeby/ws',
+    url: `https://rinkeby.infura.io/v3/26865e576832400484856124fe33ad87`,
+    wss: 'wss://rinkeby.infura.io/ws/v3/26865e576832400484856124fe33ad87',
     chainId: 4,
     nativeCurrency: {
       name: 'Rinkeby Ether',
@@ -59,8 +59,8 @@ export const NETWORKS = {
   },
   bsc: {
     name: 'Smart Chain',
-    url: 'https://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/bsc/mainnet',
-    wss: 'wss://speedy-nodes-nyc.moralis.io/a34c7dbb62a3cc4291b3a6a6/bsc/mainnet/ws',
+    url: 'https://speedy-nodes-nyc.moralis.io/044b7388fd9a572b26882581/bsc/mainnet',
+    wss: 'wss://speedy-nodes-nyc.moralis.io/044b7388fd9a572b26882581/bsc/mainnet/ws',
     chainId: 56,
     nativeCurrency: {
       name: 'Binance Coin',

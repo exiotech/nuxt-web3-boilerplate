@@ -29,15 +29,26 @@
             <label for=""
               >Amount ({{ selectedToken && balanceOf(selectedToken) }}):</label
             >
-            <input
+            <web3-input
               v-model="amount"
-              class="form-control"
               type="text"
               placeholder="Send Amount"
             />
           </fieldset>
-          <button class="btn btn-success w-100" type="submit" :disabled="!selectedToken">
+          <button
+            class="btn btn-success w-100"
+            type="submit"
+            :disabled="!selectedToken"
+          >
             Send
+          </button>
+          <button
+            v-if="!!selectedToken"
+            class="btn btn-secondary mt-1 w-100"
+            type="button"
+            @click="handleAdd"
+          >
+            Add {{ selectedToken }} to wallet
           </button>
         </web3-form>
       </div>
@@ -48,7 +59,10 @@
     >
       <div class="text-center">
         <p>Please, connect your wallet to use the app</p>
-        <button class="btn btn-primary btn-lg" @click="$nuxt.$emit('popups.unlock.open')">
+        <button
+          class="btn btn-primary btn-lg"
+          @click="$nuxt.$emit('popups.unlockwallet.open')"
+        >
           Connect
         </button>
       </div>
@@ -61,11 +75,12 @@ import { mapActions } from "vuex";
 import user from "@/mixins/user";
 
 export default {
+  name: 'SendToken',
   mixins: [user],
   data() {
     return {
       receiver: null,
-      amount: "0",
+      amount: null,
       selectedToken: null,
     };
   },
@@ -74,6 +89,9 @@ export default {
       return Object.keys(this.$contracts?.tokens || {}).filter((token) => {
         return !!this.$contracts.tokens[token].options.address;
       });
+    },
+    tokenBalance() {
+      return this.balanceOf(this.selectedToken);
     },
   },
   watch: {
@@ -86,7 +104,11 @@ export default {
   methods: {
     ...mapActions({
       send: "user/assets/send",
+      addToken: "web3/assets/addToWallet",
     }),
+    handleAdd() {
+      return this.addToken({ symbol: this.selectedToken });
+    },
     handleSend() {
       return this.send({
         token: this.selectedToken,

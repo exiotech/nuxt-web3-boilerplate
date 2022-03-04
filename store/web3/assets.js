@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 export const state = () => {
   return {
     decimals: {
-      ETH: 18,
+      NATIVE: 18,
     },
   };
 };
@@ -14,41 +14,41 @@ export const mutations = {
   },
 };
 
-function loadDecimals() {
-  const tokenNames = Object.keys(this.$contracts.tokens).filter((token) => {
-    return !!this.$contracts.tokens[token].options.address;
-  });
-  const data = tokenNames.map((tokenName) => {
-    return this.$contracts.tokens[tokenName].methods.decimals();
-  });
-  return this.$multicall(data);
-}
-
 export const actions = {
-  async loadTokensDecimals({ commit }) {
+  loadTokensDecimals({ commit }) {
     try {
       const decimals = {};
       const tokenNames = Object.keys(this.$contracts.tokens);
-      (await loadDecimals.bind(this)()).forEach((r, i) => {
-        decimals[tokenNames[i]] = Number(r);
-      });
 
-      commit("SET_DECIMALS", decimals);
+      tokenNames.forEach((tokenName) => {
+        this.$addWeb3Query(
+          `WEB3_LOAD_DECIMALS_${tokenName}`,
+          this.$contracts.tokens[tokenName].methods.decimals(),
+          (r) => {
+            decimals[tokenName] = Number(r);
+            commit("SET_DECIMALS", decimals);
+          },
+        );
+      });
     } catch (error) {
       console.error(error);
     }
   },
 
-  async loadDecimals({ rootState, commit }, tokenName) {
+  loadDecimals({ commit }, tokenName) {
     try {
-      const { address } = rootState.auth;
       const decimals = {};
       if (tokenName !== "ETH") {
         decimals.ETH = 18;
       } else {
-        decimals[tokenName] = await this.$contracts.tokens[tokenName].methods
-          .balanceOf(address)
-          .call();
+        this.$addWeb3Query(
+          `WEB3_LOAD_DECIMALS_${tokenName}`,
+          this.$contracts.tokens[tokenName].methods.decimals(),
+          (r) => {
+            decimals[tokenName] = Number(r);
+            commit("SET_DECIMALS", decimals);
+          },
+        );
       }
 
       commit("SET_DECIMALS", decimals);
@@ -56,23 +56,38 @@ export const actions = {
       console.error(error);
     }
   },
+
+  addToWallet(_, { symbol, image, decimals = 18 }) {
+    const tokenAddress = this.$contracts.tokens[symbol].options.address;
+
+    return new Promise((resolve, reject) => {
+      this.$ethereum().sendAsync(
+        {
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: tokenAddress,
+              symbol,
+              decimals,
+              image,
+            },
+          },
+        },
+        (err, result) => (err ? reject(err.message) : resolve(result)),
+      );
+    });
+  },
 };
 
 export const getters = {
-  decimals:
-    ({ decimals }) =>
-    (token) =>
-      decimals[token] || 18,
-  parseFloat:
-    ({ decimals }) =>
-    (token, amount) =>
-      new BigNumber(amount)
-        .div(new BigNumber(10).pow(new BigNumber(decimals[token] || 18)))
-        .toString(),
-  parseUint:
-    ({ decimals }) =>
-    (token, amount) =>
-      new BigNumber(amount)
-        .times(new BigNumber(10).pow(new BigNumber(decimals[token] || 18)))
-        .toString(),
+  decimals: ({ decimals }) => (token = "NATIVE") => decimals[token] || 18,
+  parseFloat: (_, { decimals }) => (token = "NATIVE", amount) =>
+    new BigNumber(amount).div(
+      new BigNumber(10).pow(new BigNumber(decimals(token))),
+    ),
+  parseUint: (_, { decimals }) => (token = "NATIVE", amount) =>
+    new BigNumber(amount).times(
+      new BigNumber(10).pow(new BigNumber(decimals(token))),
+    ),
 };

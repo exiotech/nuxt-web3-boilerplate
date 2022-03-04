@@ -5,7 +5,7 @@
     <button
       v-else
       class="btn btn-primary"
-      @click="$nuxt.$emit('popups.unlock.open')"
+      @click="$nuxt.$emit('popups.unlockwallet.open')"
     >
       Connect
     </button>
@@ -14,6 +14,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   props: {
     classes: {

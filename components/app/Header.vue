@@ -1,15 +1,10 @@
 <template>
   <header class="bg-dark header">
-    <nav
-      class="navbar navbar-expand-md navbar-dark bg-dark"
-      aria-label="Fourth navbar example"
-    >
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
       <div class="container">
-        <nuxt-link
-          to="/"
-          class="navbar-logo d-flex align-items-center me-5"
-          >{{ appName }}</nuxt-link
-        >
+        <nuxt-link to="/" class="navbar-logo d-flex align-items-center me-5">
+          {{ appName }}
+        </nuxt-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -29,7 +24,9 @@
               <nuxt-link class="nav-link" to="/send-eth">Send ETH</nuxt-link>
             </li>
             <li class="nav-item">
-              <nuxt-link class="nav-link" to="/send-token">Send Token</nuxt-link>
+              <nuxt-link class="nav-link" to="/send-token"
+                >Send Token</nuxt-link
+              >
             </li>
           </ul>
           <web3-connection-placeholder>

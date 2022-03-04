@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/variables";
+
 $font-family-sans-serif: "Kanit", system-ui, -apple-system, "Segoe UI", roboto,
   "Helvetica Neue", arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
   "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -8,6 +10,8 @@ $height-footer: 64px;
 $navbar-padding-y: 0;
 $navbar-brand-padding-y: 0;
 $nav-link-padding-y: 0;
+
+$form-feedback-text-color: $body-color;
 
 $grid-breakpoints: (
   xs: 0,
@@ -24,4 +28,19 @@ $container-max-widths: (
   lg: 960px,
   xl: 1140px,
   xxl: 1320px
+);
+
+$form-validation-states: (
+  "text": (
+    "color": $form-feedback-valid-color,
+    "icon": $form-feedback-icon-valid
+  ),
+  "valid": (
+    "color": $form-feedback-valid-color,
+    "icon": $form-feedback-icon-valid
+  ),
+  "invalid": (
+    "color": $form-feedback-invalid-color,
+    "icon": $form-feedback-icon-invalid
+  )
 );

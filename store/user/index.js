@@ -5,9 +5,9 @@ export const state = () => {
 
 export const mutations = {
   SET_DATA(state, data) {
-    for (const key in data) {
-      state[key] = data[key];
-    }
+  },
+  RESET(state) {
+    // Bring all user state to initial
   },
 };
 

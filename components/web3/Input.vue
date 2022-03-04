@@ -1,5 +1,5 @@
 <template>
-  <fieldset :disabled="disabled">
+  <fieldset>
     <label
       v-if="$slots['label-left'] || $slots['label-right']"
       :for="id"
@@ -26,7 +26,7 @@
       />
 
       <button
-        v-if="max && showMaxBtn"
+        v-if="max && isMaxButton"
         type="button"
         class="btn btn-link text-uppercase"
         :disabled="max.isEqualTo(0) || (!!value && max.isEqualTo(value))"
@@ -36,12 +36,12 @@
       </button>
 
       <button
-        v-if="!showMaxBtn"
+        v-if="!isMaxButton"
         class="btn btn-balance p w-max-content cursor-pointer fs-14 pe-3 ps-0"
         type="button"
         @click="$emit('input', max)"
       >
-        {{ maxLabel }}:
+        Balance:
         <app-countup :value="max" :decimals="2" />
       </button>
       <slot name="append" />
@@ -50,49 +50,39 @@
 </template>
 
 <script>
-import Bignumber from "bignumber.js";
+import Bignumber from 'bignumber.js';
+import Input from "@/components/app/Input";
 
 export default {
+  extends: Input,
   props: {
     id: {
       type: String,
-      default: "",
+      default: '',
     },
     value: {
       type: Bignumber,
       default: () => null,
     },
-    showMax: {
+    isMaxButton: {
       type: Boolean,
       default: true,
     },
-    maxLabel: {
-      type: String,
-      default: () => "Max:",
-    },
-    showMaxBtn: {
-      type: Boolean,
-      default: false,
-    },
     groupClass: {
       type: [String, Array, Object],
-      default: () => "",
+      default: () => '',
     },
     inputClass: {
       type: [String, Array, Object],
-      default: () => "",
+      default: () => '',
     },
     placeholder: {
       type: String,
-      default: () => "",
+      default: () => '',
     },
     max: {
       type: Bignumber,
       default: () => null,
-    },
-    disabled: {
-      type: Boolean,
-      dafault: () => false,
     },
     required: {
       type: Boolean,
@@ -107,13 +97,13 @@ export default {
   },
   computed: {
     labelClass() {
-      if (this.$slots["label-left"]) {
-        return "justify-content-between";
+      if (this.$slots['label-left']) {
+        return 'justify-content-between';
       }
-      if (this.$slots["label-right"]) {
-        return "justify-content-end";
+      if (this.$slots['label-right']) {
+        return 'justify-content-end';
       }
-      return "";
+      return '';
     },
   },
   watch: {
@@ -128,21 +118,21 @@ export default {
   },
   methods: {
     onInput(e) {
-      const parts = e.target.value.split(".");
+      const parts = e.target.value.split('.');
       if (parts.length === 2 && (parts[1].match(/[0]+$/) || !parts[1].length)) {
         this.inputValue = e.target.value;
         return;
       }
       let value = new Bignumber(e.target.value);
       if (value.isNaN()) {
-        this.$emit("input", null);
+        this.$emit('input', null);
         return;
       }
       value = new Bignumber(value);
       if (this.max) {
         value = Bignumber.minimum(value, this.max);
       }
-      this.$emit("input", value);
+      this.$emit('input', value);
     },
   },
 };

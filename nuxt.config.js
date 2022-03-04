@@ -1,7 +1,9 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
-
+import dotenv from "dotenv";
 import i18n from "./i18n";
-import pkg from "./package";
+import pkg from "./package.json";
+
+dotenv.config();
 
 export default defineNuxtConfig({
   // Target: https://go.nuxtjs.dev/config-target
@@ -134,7 +136,7 @@ export default defineNuxtConfig({
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // "@nuxtjs/eslint-module",
+    "@nuxtjs/eslint-module",
     "@nuxtjs/stylelint-module",
     "@nuxtjs/style-resources",
     "@nuxtjs/localforage",
@@ -177,9 +179,9 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
-    extend: (config, { isDev, isClient }) => {
+    extend: (config) => {
       config.node = {
-          fs: "empty",
+        fs: "empty",
       };
     },
   },

@@ -1,76 +1,79 @@
 <template>
-  <div class="modal" :class="{ show }">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content mx-auto">
-        <div class="modal-body text-center">
-          <p>{{ text }}</p>
-          <button
-            v-if="isConfirmed || error"
-            class="btn btn-primary w-100"
-            @click="close"
-          >
-            Ok
-          </button>
-          <div v-else-if="txhash" class="row">
-            <div class="col">
-              <a
-                class="btn btn-link w-100"
-                :href="`https://rinkeby.etherscan.io/tx/${txhash}`"
-                target="_blank"
-              >
-                View on Explorer
-              </a>
-            </div>
-            <div class="col">
-              <button class="btn btn-primary w-100" @click="close">Close</button>
-            </div>
-          </div>
-        </div>
+  <popups-wrapper name="transaction" :show="show" @close="close">
+    <p>{{ text }}</p>
+    <button
+      v-if="isConfirmed || error"
+      class="btn btn-primary w-100"
+      @click="close"
+    >
+      Ok
+    </button>
+    <div v-else-if="txhash" class="row">
+      <div class="col">
+        <a
+          class="btn btn-link w-100"
+          :href="`https://rinkeby.etherscan.io/tx/${txhash}`"
+          target="_blank"
+        >
+          View on Explorer
+        </a>
+      </div>
+      <div class="col">
+        <button class="btn btn-primary w-100" @click="close">Close</button>
       </div>
     </div>
-  </div>
+  </popups-wrapper>
 </template>
 
 
+
 <script>
-import { mapGetters } from "vuex";
-import PopupsBase from "./_Base";
+import { mapGetters, mapMutations } from 'vuex';
+import PopupsBase from './_Base';
 
 export default {
   extends: PopupsBase,
+
   data() {
     return {
+      name: 'transaction',
       txhash: null,
-      error: null,
     };
   },
+
   computed: {
     ...mapGetters({
-      transactions: "transactions/all",
+      transactions: 'web3/transactions/all',
     }),
     isConfirmed() {
-      return this.txhash && this.transactions[this.txhash]?.status === "CONFIRMED";
+      return !!this.txhash && this.transactions[this.txhash]?.status === 'CONFIRMED';
+    },
+    error() {
+      return this.transactions[this.txhash]?.error;
     },
     text() {
-      if (this.error) {
-        return "Something went wrong.";
+      switch (this.transactions[this.txhash]?.status) {
+        case 'ERROR':
+          return 'Transaction cancelled or failed, please try again';
+        case 'CONFIRMED':
+          return 'Transaction successfully confirmed';
+        case 'PENDING_CONFIRMATION':
+          return 'Waiting for transaction confirm';
+        default:
+          return 'Please confirm transaction';
       }
-      return this.isConfirmed
-        ? "Transaction sucessfully confirmed!"
-        : this.txhash
-        ? "Waiting for the transaction to confim..."
-        : "Please confirm the popped-up transaction.";
     },
     title() {
-      if (this.error) {
-        return "Transaction failed";
+      switch (this.transactions[this.txhash]?.status) {
+        case 'ERROR':
+          return 'Transaction Failed';
+        case 'CONFIRMED':
+          return 'Transaction Confirmed';
+        case 'PENDING_CONFIRMATION':
+          return 'Please Wait';
+        default:
+          return 'Confirm Transaction';
       }
-
-      return this.isConfirmed
-        ? "Transaction confirmed!"
-        : this.txhash
-        ? "Please wait"
-        : "Confirm Transaction";
     },
   },
   watch: {
@@ -83,19 +86,25 @@ export default {
         this.show = true;
       }
     },
-  },
-  mounted() {
-    this.registerEvent("error", (e) => {
-      console.error(e);
-      this.error = e;
-      this.show = true;
-    });
+    isConfirmed(to, from) {
+      if (from === false) {
+        this.show = true;
+        setTimeout(() => {
+          this.close();
+        }, 2000);
+      }
+    },
   },
   methods: {
+    ...mapMutations({
+      removeTx: 'web3/transactions/REMOVE_TRANSACTION',
+    }),
     close() {
-      this.error = null;
-      this.txhash = null;
       this.show = false;
+      if (this.error || this.isConfirmed) {
+        this.removeTx(this.txhash);
+      }
+      this.txhash = null;
     },
   },
 };

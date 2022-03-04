@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit">
+  <form @submit.prevent="handleSubmit">
     <slot />
   </form>
 </template>
@@ -16,11 +16,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      transactions: "transactions/all",
+      transactions: "web3/transactions/all",
     }),
   },
   methods: {
-    async submit() {
+    async handleSubmit() {
       try {
         this.$nuxt.$emit("popups.transaction.open");
         await this.callback();

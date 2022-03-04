@@ -31,7 +31,7 @@
     >
       <div class="text-center">
         <p>Please, connect your wallet to use the app</p>
-        <button class="btn btn-primary btn-lg" @click="$nuxt.$emit('popups.unlock.open')">
+        <button class="btn btn-primary btn-lg" @click="$nuxt.$emit('popups.unlockwallet.open')">
           Connect
         </button>
       </div>
@@ -44,11 +44,12 @@ import { mapActions } from "vuex";
 import user from "@/mixins/user";
 
 export default {
+  name: 'SendEth',
   mixins: [user],
   data() {
     return {
       receiver: null,
-      amount: "0",
+      amount: null,
     };
   },
   methods: {

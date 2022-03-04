@@ -1,5 +1,5 @@
-import ADDRESSES from "@/contracts/addresses";
-import { NETWORKS, getChainById } from "@/constants/networks";
+import ADDRESSES from '@/contracts/addresses';
+import { NETWORKS, getChainById } from '@/constants/networks';
 
 export const state = () => {
   return {
@@ -22,6 +22,11 @@ export const mutations = {
 };
 
 export const actions = {
+  setChainId({ commit }, chainId) {
+    commit('SET_CHAIN_ID', chainId);
+    commit('stats/RESET', {}, { root: true });
+    commit('user/RESET', {}, { root: true });
+  },
   switchChain(d, chainId) {
     const chain = getChainById(chainId);
     return new Promise((resolve, reject) => {
@@ -33,33 +38,41 @@ export const actions = {
         }
       };
       if (chainId >= 56) {
-        this.$ethereum().sendAsync({
-          id: 1,
-          jsonrpc: "2.0",
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: `0x${chainId.toString(16)}`,
-              chainName: chain.name,
-              rpcUrls: [chain.url],
-              nativeCurrency: chain.nativeCurrency,
-              blockExplorerUrls: [chain.blockExplorerUrl],
-            },
-          ],
-        }, callback);
+        this.$ethereum().sendAsync(
+          {
+            id: 1,
+            jsonrpc: '2.0',
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: `0x${chainId.toString(16)}`,
+                chainName: chain.name,
+                rpcUrls: [chain.url],
+                nativeCurrency: chain.nativeCurrency,
+                blockExplorerUrls: [chain.blockExplorerUrl],
+              },
+            ],
+          },
+          callback,
+        );
       } else {
-        this.$ethereum().sendAsync({
-          id: 1,
-          jsonrpc: "2.0",
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: `0x${chainId.toString(16)}` }],
-        }, callback);
+        this.$ethereum().sendAsync(
+          {
+            id: 1,
+            jsonrpc: '2.0',
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: `0x${chainId.toString(16)}` }],
+          },
+          callback,
+        );
       }
     });
   },
 };
 
 export const getters = {
+  isLoading: ({ isLoading }) => isLoading,
+  status: ({ status }) => status,
   chainId: ({ chainId }) => chainId,
   isSupportedChain: ({ chainId }) => {
     let res = true;

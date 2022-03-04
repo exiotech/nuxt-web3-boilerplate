@@ -2,11 +2,12 @@
   <footer class="footer bg-light border-top py-3">
     <div class="container">
       <div class="row">
-        <div class="col">
-          Copyright Exio.tech {{ year }}
-        </div>
+        <div class="col">Copyright Exio.tech {{ year }}</div>
         <div class="col-auto">
-          Developed by Exio.tech
+          Developed by
+          <a href="https://exio.tech" target="_blank" rel="noopener noreferrer"
+            >Exio.tech</a
+          >
         </div>
       </div>
     </div>

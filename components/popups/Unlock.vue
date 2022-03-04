@@ -1,29 +1,32 @@
 <template>
-  <popups-wrapper title="Connect to a wallet" name="unlock">
-    <div slot-scope="popup">
-      <button
-        v-for="(provider, index) of providers"
-        :key="index"
-        type="button"
-        class="card card-body w-100 mb-3"
-        @click="handleConnect(index, popup.close)"
-      >
-        <div class="row no-gutters align-items-center">
-          <div class="col">
-            <p class="mb-0 fw-bold">
-              {{ provider.name }}
-            </p>
-          </div>
-          <div class="col-auto">
-            <img
-              :src="provider.logo"
-              :alt="provider.name"
-              class="provider-icon bg-white rounded-circle"
-            />
-          </div>
+  <popups-wrapper
+    title="Connect to a wallet"
+    name="unlock"
+    :show="show"
+    @close="close"
+  >
+    <button
+      v-for="(provider, index) of providers"
+      :key="index"
+      type="button"
+      class="card card-body w-100 mb-3"
+      @click="handleConnect(index)"
+    >
+      <div class="row no-gutters align-items-center">
+        <div class="col">
+          <p class="mb-0 fw-bold">
+            {{ provider.name }}
+          </p>
         </div>
-      </button>
-    </div>
+        <div class="col-auto">
+          <img
+            :src="provider.logo"
+            :alt="provider.name"
+            class="provider-icon bg-white rounded-circle"
+          />
+        </div>
+      </div>
+    </button>
   </popups-wrapper>
 </template>
 
@@ -32,15 +35,15 @@ const { $setWeb3Provider, $store, $localForage } = useNuxtApp();
 
 let selectedProviderIndex = null;
 
-async function handleConnect(index, callback) {
+async function handleConnect(index) {
   selectedProviderIndex = index;
   const { providerName } = this.providers[index];
   try {
-    await $localForage.setItem('provider', providerName);
+    await $localForage.setItem("provider", providerName);
     await $setWeb3Provider(providerName);
-    await $store.dispatch('auth/login');
+    await $store.dispatch("auth/login");
     selectedProviderIndex = null;
-    callback();
+    this.close();
   } catch (err) {
     console.error(err);
   }
@@ -49,15 +52,12 @@ async function handleConnect(index, callback) {
 
 <script>
 import { mapActions } from "vuex";
+import PopupsBase from "./_Base";
 import { PROVIDERS } from "~/constants";
 
 export default {
   name: "UnlockWallet",
-  data() {
-    return {
-      selectedProviderIndex: null,
-    };
-  },
+  extends: PopupsBase,
 
   computed: {
     providers() {
@@ -66,7 +66,8 @@ export default {
           return false;
         }
         return (
-          provider.providerName !== 'injected' || window.ethereum?.[provider.indetifier]
+          provider.providerName !== "injected" ||
+          window.ethereum?.[provider.indetifier]
         );
       });
     },
@@ -74,7 +75,7 @@ export default {
 
   methods: {
     ...mapActions({
-      login: 'auth/login',
+      login: "auth/login",
     }),
   },
 };

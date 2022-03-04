@@ -15,6 +15,9 @@ module.exports = {
   ignorePatterns: readGitignoreFiles({ cwd: __dirname }),
   // add your custom rules here
   rules: {
+    "no-undef": 0,
+    "no-unused-vars": 0,
+    "import/first": 0,
     "no-console": 0,
     "vue/no-v-html": 0,
     "comma-dangle": ["error", "always-multiline"],
