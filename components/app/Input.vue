@@ -53,97 +53,97 @@
 import Bignumber from "bignumber.js";
 
 export default {
-  props: {
-    id: {
-      type: String,
-      default: "",
-    },
-    value: {
-      type: Bignumber,
-      default: () => null,
-    },
-    showMax: {
-      type: Boolean,
-      default: true,
-    },
-    maxLabel: {
-      type: String,
-      default: () => "Max:",
-    },
-    showMaxBtn: {
-      type: Boolean,
-      default: false,
-    },
-    groupClass: {
-      type: [String, Array, Object],
-      default: () => "",
-    },
-    inputClass: {
-      type: [String, Array, Object],
-      default: () => "",
-    },
-    placeholder: {
-      type: String,
-      default: () => "",
-    },
-    max: {
-      type: Bignumber,
-      default: () => null,
-    },
-    disabled: {
-      type: Boolean,
-      dafault: () => false,
-    },
-    required: {
-      type: Boolean,
-      dafault: () => false,
-    },
-  },
-  data() {
-    return {
-      inputValue: null,
-      focused: false,
-    };
-  },
-  computed: {
-    labelClass() {
-      if (this.$slots["label-left"]) {
-        return "justify-content-between";
-      }
-      if (this.$slots["label-right"]) {
-        return "justify-content-end";
-      }
-      return "";
-    },
-  },
-  watch: {
-    value(to) {
-      this.inputValue = to;
-    },
-    max(to) {
-      if (to.isLessThan(this.inputValue)) {
-        this.inputValue = to.toString();
-      }
-    },
-  },
-  methods: {
-    onInput(e) {
-      const parts = e.target.value.split(".");
-      if (parts.length === 2 && (parts[1].match(/[0]+$/) || !parts[1].length)) {
-        this.inputValue = e.target.value;
-        return;
-      }
-      let value = new Bignumber(e.target.value);
-      if (value.isNaN()) {
-        this.$emit("input", null);
-        return;
-      }
-      value = new Bignumber(value);
-      if (this.max) {
-        value = Bignumber.minimum(value, this.max);
-      }
-      this.$emit("input", value);
-    },
-  },
+	props: {
+		id: {
+			type: String,
+			default: "",
+		},
+		value: {
+			type: Bignumber,
+			default: () => null,
+		},
+		showMax: {
+			type: Boolean,
+			default: true,
+		},
+		maxLabel: {
+			type: String,
+			default: () => "Max:",
+		},
+		showMaxBtn: {
+			type: Boolean,
+			default: false,
+		},
+		groupClass: {
+			type: [String, Array, Object],
+			default: () => "",
+		},
+		inputClass: {
+			type: [String, Array, Object],
+			default: () => "",
+		},
+		placeholder: {
+			type: String,
+			default: () => "",
+		},
+		max: {
+			type: Bignumber,
+			default: () => null,
+		},
+		disabled: {
+			type: Boolean,
+			dafault: () => false,
+		},
+		required: {
+			type: Boolean,
+			dafault: () => false,
+		},
+	},
+	data() {
+		return {
+			inputValue: null,
+			focused: false,
+		};
+	},
+	computed: {
+		labelClass() {
+			if (this.$slots["label-left"]) {
+				return "justify-content-between";
+			}
+			if (this.$slots["label-right"]) {
+				return "justify-content-end";
+			}
+			return "";
+		},
+	},
+	watch: {
+		value(to) {
+			this.inputValue = to;
+		},
+		max(to) {
+			if (to.isLessThan(this.inputValue)) {
+				this.inputValue = to.toString();
+			}
+		},
+	},
+	methods: {
+		onInput(e) {
+			const parts = e.target.value.split(".");
+			if (parts.length === 2 && (parts[1].match(/[0]+$/) || !parts[1].length)) {
+				this.inputValue = e.target.value;
+				return;
+			}
+			let value = new Bignumber(e.target.value);
+			if (value.isNaN()) {
+				this.$emit("input", null);
+				return;
+			}
+			value = new Bignumber(value);
+			if (this.max) {
+				value = Bignumber.minimum(value, this.max);
+			}
+			this.$emit("input", value);
+		},
+	},
 };
 </script>

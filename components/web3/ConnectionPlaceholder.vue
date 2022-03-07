@@ -16,20 +16,20 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: {
-    classes: {
-      type: [Array, String, Object],
-      default: () => [],
-    },
-    tag: {
-      type: String,
-      default: "div",
-    },
-  },
-  computed: {
-    ...mapGetters({
-      address: "auth/address",
-    }),
-  },
+	props: {
+		classes: {
+			type: [Array, String, Object],
+			default: () => [],
+		},
+		tag: {
+			type: String,
+			default: "div",
+		},
+	},
+	computed: {
+		...mapGetters({
+			address: "auth/address",
+		}),
+	},
 };
 </script>

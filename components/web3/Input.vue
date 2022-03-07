@@ -54,86 +54,86 @@ import Bignumber from 'bignumber.js';
 import Input from "@/components/app/Input";
 
 export default {
-  extends: Input,
-  props: {
-    id: {
-      type: String,
-      default: '',
-    },
-    value: {
-      type: Bignumber,
-      default: () => null,
-    },
-    isMaxButton: {
-      type: Boolean,
-      default: true,
-    },
-    groupClass: {
-      type: [String, Array, Object],
-      default: () => '',
-    },
-    inputClass: {
-      type: [String, Array, Object],
-      default: () => '',
-    },
-    placeholder: {
-      type: String,
-      default: () => '',
-    },
-    max: {
-      type: Bignumber,
-      default: () => null,
-    },
-    required: {
-      type: Boolean,
-      dafault: () => false,
-    },
-  },
-  data() {
-    return {
-      inputValue: null,
-      focused: false,
-    };
-  },
-  computed: {
-    labelClass() {
-      if (this.$slots['label-left']) {
-        return 'justify-content-between';
-      }
-      if (this.$slots['label-right']) {
-        return 'justify-content-end';
-      }
-      return '';
-    },
-  },
-  watch: {
-    value(to) {
-      this.inputValue = to;
-    },
-    max(to) {
-      if (to.isLessThan(this.inputValue)) {
-        this.inputValue = to.toString();
-      }
-    },
-  },
-  methods: {
-    onInput(e) {
-      const parts = e.target.value.split('.');
-      if (parts.length === 2 && (parts[1].match(/[0]+$/) || !parts[1].length)) {
-        this.inputValue = e.target.value;
-        return;
-      }
-      let value = new Bignumber(e.target.value);
-      if (value.isNaN()) {
-        this.$emit('input', null);
-        return;
-      }
-      value = new Bignumber(value);
-      if (this.max) {
-        value = Bignumber.minimum(value, this.max);
-      }
-      this.$emit('input', value);
-    },
-  },
+	extends: Input,
+	props: {
+		id: {
+			type: String,
+			default: '',
+		},
+		value: {
+			type: Bignumber,
+			default: () => null,
+		},
+		isMaxButton: {
+			type: Boolean,
+			default: true,
+		},
+		groupClass: {
+			type: [String, Array, Object],
+			default: () => '',
+		},
+		inputClass: {
+			type: [String, Array, Object],
+			default: () => '',
+		},
+		placeholder: {
+			type: String,
+			default: () => '',
+		},
+		max: {
+			type: Bignumber,
+			default: () => null,
+		},
+		required: {
+			type: Boolean,
+			dafault: () => false,
+		},
+	},
+	data() {
+		return {
+			inputValue: null,
+			focused: false,
+		};
+	},
+	computed: {
+		labelClass() {
+			if (this.$slots['label-left']) {
+				return 'justify-content-between';
+			}
+			if (this.$slots['label-right']) {
+				return 'justify-content-end';
+			}
+			return '';
+		},
+	},
+	watch: {
+		value(to) {
+			this.inputValue = to;
+		},
+		max(to) {
+			if (to.isLessThan(this.inputValue)) {
+				this.inputValue = to.toString();
+			}
+		},
+	},
+	methods: {
+		onInput(e) {
+			const parts = e.target.value.split('.');
+			if (parts.length === 2 && (parts[1].match(/[0]+$/) || !parts[1].length)) {
+				this.inputValue = e.target.value;
+				return;
+			}
+			let value = new Bignumber(e.target.value);
+			if (value.isNaN()) {
+				this.$emit('input', null);
+				return;
+			}
+			value = new Bignumber(value);
+			if (this.max) {
+				value = Bignumber.minimum(value, this.max);
+			}
+			this.$emit('input', value);
+		},
+	},
 };
 </script>

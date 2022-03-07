@@ -36,17 +36,17 @@ const { $setWeb3Provider, $store, $localForage } = useNuxtApp();
 let selectedProviderIndex = null;
 
 async function handleConnect(index) {
-  selectedProviderIndex = index;
-  const { providerName } = this.providers[index];
-  try {
-    await $localForage.setItem("provider", providerName);
-    await $setWeb3Provider(providerName);
-    await $store.dispatch("auth/login");
-    selectedProviderIndex = null;
-    this.close();
-  } catch (err) {
-    console.error(err);
-  }
+	selectedProviderIndex = index;
+	const { providerName } = this.providers[index];
+	try {
+		await $localForage.setItem("provider", providerName);
+		await $setWeb3Provider(providerName);
+		await $store.dispatch("auth/login");
+		selectedProviderIndex = null;
+		this.close();
+	} catch (err) {
+		console.error(err);
+	}
 }
 </script>
 
@@ -56,28 +56,28 @@ import PopupsBase from "./_Base";
 import { PROVIDERS } from "~/constants";
 
 export default {
-  name: "UnlockWallet",
-  extends: PopupsBase,
+	name: "UnlockWallet",
+	extends: PopupsBase,
 
-  computed: {
-    providers() {
-      return PROVIDERS.filter((provider) => {
-        if (provider.isInstalled && !provider.isInstalled()) {
-          return false;
-        }
-        return (
-          provider.providerName !== "injected" ||
+	computed: {
+		providers() {
+			return PROVIDERS.filter((provider) => {
+				if (provider.isInstalled && !provider.isInstalled()) {
+					return false;
+				}
+				return (
+					provider.providerName !== "injected" ||
           window.ethereum?.[provider.indetifier]
-        );
-      });
-    },
-  },
+				);
+			});
+		},
+	},
 
-  methods: {
-    ...mapActions({
-      login: "auth/login",
-    }),
-  },
+	methods: {
+		...mapActions({
+			login: "auth/login",
+		}),
+	},
 };
 </script>
 

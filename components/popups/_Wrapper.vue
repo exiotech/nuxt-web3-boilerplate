@@ -16,24 +16,24 @@
 
 <script>
 export default {
-  props: {
-    closable: {
-      type: Boolean,
-      default: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      default: null,
-    },
-    show: {
-      type: Boolean,
-      default: false,
-    },
-  },
+	props: {
+		closable: {
+			type: Boolean,
+			default: true,
+		},
+		name: {
+			type: String,
+			required: true,
+		},
+		title: {
+			type: String,
+			default: null,
+		},
+		show: {
+			type: Boolean,
+			default: false,
+		},
+	},
 };
 </script>
 

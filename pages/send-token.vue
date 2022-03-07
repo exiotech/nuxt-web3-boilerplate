@@ -75,48 +75,48 @@ import { mapActions } from "vuex";
 import user from "@/mixins/user";
 
 export default {
-  name: 'SendToken',
-  mixins: [user],
-  data() {
-    return {
-      receiver: null,
-      amount: null,
-      selectedToken: null,
-    };
-  },
-  computed: {
-    tokenNames() {
-      return Object.keys(this.$contracts?.tokens || {}).filter((token) => {
-        return !!this.$contracts.tokens[token].options.address;
-      });
-    },
-    tokenBalance() {
-      return this.balanceOf(this.selectedToken);
-    },
-  },
-  watch: {
-    tokenNames(to) {
-      if (to[0]) {
-        this.selectedToken = to[0];
-      }
-    },
-  },
-  methods: {
-    ...mapActions({
-      send: "user/assets/send",
-      addToken: "web3/assets/addToWallet",
-    }),
-    handleAdd() {
-      return this.addToken({ symbol: this.selectedToken });
-    },
-    handleSend() {
-      return this.send({
-        token: this.selectedToken,
-        receiver: this.receiver,
-        amount: this.amount,
-      });
-    },
-  },
+	name: 'SendToken',
+	mixins: [user],
+	data() {
+		return {
+			receiver: null,
+			amount: null,
+			selectedToken: null,
+		};
+	},
+	computed: {
+		tokenNames() {
+			return Object.keys(this.$contracts?.tokens || {}).filter((token) => {
+				return !!this.$contracts.tokens[token].options.address;
+			});
+		},
+		tokenBalance() {
+			return this.balanceOf(this.selectedToken);
+		},
+	},
+	watch: {
+		tokenNames(to) {
+			if (to[0]) {
+				this.selectedToken = to[0];
+			}
+		},
+	},
+	methods: {
+		...mapActions({
+			send: "user/assets/send",
+			addToken: "web3/assets/addToWallet",
+		}),
+		handleAdd() {
+			return this.addToken({ symbol: this.selectedToken });
+		},
+		handleSend() {
+			return this.send({
+				token: this.selectedToken,
+				receiver: this.receiver,
+				amount: this.amount,
+			});
+		},
+	},
 };
 </script>
 

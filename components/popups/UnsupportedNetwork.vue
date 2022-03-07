@@ -31,50 +31,50 @@ import PopupsBase from "./_Base";
 import { NETWORKS } from "~/constants/networks";
 
 export default {
-  name: "UnsupportedNetwork",
-  extends: PopupsBase,
-  data() {
-    return {
-      switching: false,
-    };
-  },
-  computed: {
-    ...mapGetters({
-      chainId: "web3/chainId",
-      supportedNetworks: "web3/supportedNetworks",
-      isSupportedChain: "web3/isSupportedChain",
-    }),
-    currentNetworkName() {
-      return (
-        Object.values(NETWORKS).filter(({ chainId }) => chainId === this.chainId)[0]
-          ?.name || "Unknown network"
-      );
-    },
-  },
-  watch: {
-    chainId() {
-      if (!this.isSupportedChain) {
-        this.open();
-      } else {
-        this.close();
-      }
-    },
-  },
-  methods: {
-    ...mapActions({
-      switchChain: "web3/switchChain",
-    }),
-    async onSwitchChain(chainId) {
-      try {
-        this.switching = true;
-        await this.switchChain(chainId);
-        this.close();
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.switching = false;
-      }
-    },
-  },
+	name: "UnsupportedNetwork",
+	extends: PopupsBase,
+	data() {
+		return {
+			switching: false,
+		};
+	},
+	computed: {
+		...mapGetters({
+			chainId: "web3/chainId",
+			supportedNetworks: "web3/supportedNetworks",
+			isSupportedChain: "web3/isSupportedChain",
+		}),
+		currentNetworkName() {
+			return (
+				Object.values(NETWORKS).filter(({ chainId }) => chainId === this.chainId)[0]
+					?.name || "Unknown network"
+			);
+		},
+	},
+	watch: {
+		chainId() {
+			if (!this.isSupportedChain) {
+				this.open();
+			} else {
+				this.close();
+			}
+		},
+	},
+	methods: {
+		...mapActions({
+			switchChain: "web3/switchChain",
+		}),
+		async onSwitchChain(chainId) {
+			try {
+				this.switching = true;
+				await this.switchChain(chainId);
+				this.close();
+			} catch (e) {
+				console.error(e);
+			} finally {
+				this.switching = false;
+			}
+		},
+	},
 };
 </script>

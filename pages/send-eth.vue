@@ -44,26 +44,26 @@ import { mapActions } from "vuex";
 import user from "@/mixins/user";
 
 export default {
-  name: 'SendEth',
-  mixins: [user],
-  data() {
-    return {
-      receiver: null,
-      amount: null,
-    };
-  },
-  methods: {
-    ...mapActions({
-      send: "user/assets/sendNative",
-    }),
-    handleSend() {
-      return this.$web3.eth.sendTransaction({
-        from: this.address,
-        to: this.receiver,
-        value: this.$web3.utils.toWei(this.amount.toString()),
-      });
-    },
-  },
+	name: 'SendEth',
+	mixins: [user],
+	data() {
+		return {
+			receiver: null,
+			amount: null,
+		};
+	},
+	methods: {
+		...mapActions({
+			send: "user/assets/sendNative",
+		}),
+		handleSend() {
+			return this.$web3.eth.sendTransaction({
+				from: this.address,
+				to: this.receiver,
+				value: this.$web3.utils.toWei(this.amount.toString()),
+			});
+		},
+	},
 };
 </script>
 

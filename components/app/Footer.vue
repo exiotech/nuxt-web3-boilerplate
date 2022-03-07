@@ -15,12 +15,12 @@
 </template>
 <script>
 export default {
-  computed: {
-    year() {
-      const date = new Date();
-      return date.getFullYear();
-    },
-  },
+	computed: {
+		year() {
+			const date = new Date();
+			return date.getFullYear();
+		},
+	},
 };
 </script>
 <style lang="scss" scoped>

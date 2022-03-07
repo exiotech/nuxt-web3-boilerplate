@@ -10,8 +10,8 @@
 import user from "@/mixins/user";
 
 export default {
-  name: 'Homepage',
-  mixins: [user],
+	name: 'Homepage',
+	mixins: [user],
 };
 </script>
 
